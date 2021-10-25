@@ -1,4 +1,4 @@
-import { VFC } from 'react';
+import { useCallback, useMemo, VFC } from 'react';
 import { Grid } from '@mui/material';
 import { ExampleBox } from '../components';
 import { useNoc, useResult } from '../contexts';
@@ -11,11 +11,11 @@ export const Calculations:VFC = () => {
   const numberOfExamples = nocStore.noc;
   const correctExamples = resultsStore.correctResults.length;
 
-  const generateRandomNumber = (max: number) => {
+  const generateRandomNumber = useCallback((max: number) => {
     return Math.floor(Math.random() * max) + 1;
-  }
+  },[])
 
-  const calculateExample = (n1: number, n2: number, index: number) => {
+  const calculateExample = useCallback((n1: number, n2: number, index: number) => {
     let res: number = 0;
       switch (index){
         case 0: res=n1+n2; break;
@@ -23,9 +23,9 @@ export const Calculations:VFC = () => {
         case 2: res=n1*n2; break;
       }
     return res;
-  }
+  }, [])
 
-  const generateExamplesArray = () => {
+  const generateExamplesArray = useCallback(() => {
     let list:Array<IExample> = [];
     let ops = ['+','-','*'];
 
@@ -43,9 +43,10 @@ export const Calculations:VFC = () => {
       list.push({number1, number2, operator, result});
     }
     return list;
-  }
+  },[calculateExample, generateRandomNumber, numberOfExamples])
 
-  const listExamples = generateExamplesArray();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const listExamples = useMemo(() => generateExamplesArray(), []);
 
   return (
     <div>

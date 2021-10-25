@@ -4,7 +4,7 @@ import {
   Switch,
   Route,
 } from "react-router-dom";
-import { Navigation } from './components/Navigation';
+import { Navigation } from './components';
 import { NocProvider, ResultProvider} from './contexts';
 import { Calculations, Home } from './pages';
 
